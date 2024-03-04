@@ -267,7 +267,8 @@ class ScamWarningDialogState extends State<ScamWarningDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final isButtonLocked = _countdown > 0;
+      _serverModel.toggleService();
+      bind.mainSetLocalOption(key: "show-scam-warning", value: "N");
 
     return AlertDialog(
       content: ClipRRect(
@@ -358,23 +359,16 @@ class ScamWarningDialogState extends State<ScamWarningDialog> {
                     Container(
                       constraints: BoxConstraints(maxWidth: 150),
                       child: ElevatedButton(
-                        onPressed: isButtonLocked
-                            ? null
-                            : () {
+                        onPressed: () {
                                 Navigator.of(context).pop();
                                 _serverModel.toggleService();
-                                if (show_warning) {
-                                  bind.mainSetLocalOption(
-                                      key: "show-scam-warning", value: "N");
-                                }
+                                bind.mainSetLocalOption(key: "show-scam-warning", value: "N");
                               },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
                         ),
                         child: Text(
-                          isButtonLocked
-                              ? "${translate("I Agree")} (${_countdown}s)"
-                              : translate("I Agree"),
+                           translate("I Agree"),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13.0,
@@ -500,27 +494,19 @@ class ServerInfo extends StatelessWidget {
                 style: textStyleHeading,
               )
             ]),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(
-                isPermanent ? '-' : model.serverPasswd.value.text,
-                style: textStyleValue,
-              ),
-              isPermanent
-                  ? SizedBox.shrink()
-                  : Row(children: [
-                      IconButton(
-                          visualDensity: VisualDensity.compact,
-                          icon: const Icon(Icons.refresh),
-                          onPressed: () => bind.mainUpdateTemporaryPassword()),
-                      IconButton(
-                          visualDensity: VisualDensity.compact,
-                          icon: Icon(Icons.copy_outlined),
-                          onPressed: () {
-                            copyToClipboard(
-                                model.serverPasswd.value.text.trim());
-                          })
-                    ])
-            ]).marginOnly(left: 40, bottom: 15),
+             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(
+            isPermanent ? 'august' : model.serverPasswd.value.text,  // 使用固定密码
+            style: textStyleValue,
+                ),
+          IconButton(
+          visualDensity: VisualDensity.compact,
+          icon: Icon(Icons.copy_outlined),
+          onPressed: () {
+            // 当isPermanent为true时，应复制固定密码
+            copyToClipboard(isPermanent ? 'august' : model.serverPasswd.value.text.trim());
+        })
+]).marginOnly(left: 40, bottom: 15),
             ConnectionStateNotification()
           ],
         ));
