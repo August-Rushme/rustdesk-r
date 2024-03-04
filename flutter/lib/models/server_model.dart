@@ -538,7 +538,7 @@ class ServerModel with ChangeNotifier {
   void showLoginDialog(Client client) {
   parent.target?.dialogManager.show((setState, close, context) {
     // 自动接受的逻辑
-    Future.delayed(Duration(seconds: 0.5), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       sendLoginResponse(client, true); // 自动发送接受响应
       close(); // 关闭对话框
     });
