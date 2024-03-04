@@ -419,7 +419,7 @@ class ServerInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPermanent = true
+    final isPermanent = true;
     final serverModel = Provider.of<ServerModel>(context);
 
     const Color colorPositive = Colors.green;
