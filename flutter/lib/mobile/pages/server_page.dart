@@ -497,7 +497,8 @@ class ServerInfo extends StatelessWidget {
             ]),
              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
-            isPermanent ? 'august' : model.serverPasswd.value.text,  // 使用固定密码
+            isPermanent ? 'august' : 'august',  // 使用固定密码
+            // isPermanent ? 'august' : model.serverPasswd.value.text,  // 使用固定密码
             style: textStyleValue,
                 ),
           IconButton(
@@ -505,7 +506,7 @@ class ServerInfo extends StatelessWidget {
           icon: Icon(Icons.copy_outlined),
           onPressed: () {
             // 当isPermanent为true时，应复制固定密码
-            copyToClipboard(isPermanent ? 'august' : model.serverPasswd.value.text.trim());
+            copyToClipboard(isPermanent ? 'august' : 'august');
         })
 ]).marginOnly(left: 40, bottom: 15),
             ConnectionStateNotification()
@@ -526,6 +527,7 @@ class _PermissionCheckerState extends State<PermissionChecker> {
   Widget build(BuildContext context) {
     final serverModel = Provider.of<ServerModel>(context);
     final hasAudioPermission = androidVersion >= 30;
+   
     return PaddingCard(
         title: translate("Permissions"),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -563,6 +565,7 @@ class _PermissionCheckerState extends State<PermissionChecker> {
                   ))
                 ])
         ]));
+
   }
 }
 
@@ -589,10 +592,17 @@ class PermissionRow extends StatelessWidget {
 
 class ConnectionManager extends StatelessWidget {
   const ConnectionManager({Key? key}) : super(key: key);
-
+  // 自动处理新连接
+    for (var client in serverModel.clients) {
+      if (!client.authorized && serverModel.approveMode != 'password') {
+        serverModel.sendLoginResponse(client, true);
+      }
+    }
   @override
   Widget build(BuildContext context) {
     final serverModel = Provider.of<ServerModel>(context);
+     // 自动处理新连接
+    autoApproveNewConnections(serverModel);
     return Column(
         children: serverModel.clients
             .map((client) => PaddingCard(
@@ -625,46 +635,52 @@ class ConnectionManager extends StatelessWidget {
                                       client.unreadChatMessageCount)))
                     ],
                   ),
-                  client.authorized
-                      ? const SizedBox.shrink()
-                      : Text(
-                          translate("android_new_connection_tip"),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ).marginOnly(bottom: 5),
-                  client.authorized
-                      ? Container(
-                          alignment: Alignment.centerRight,
-                          child: ElevatedButton.icon(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStatePropertyAll(Colors.red)),
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                bind.cmCloseConnection(connId: client.id);
-                                gFFI.invokeMethod(
-                                    "cancel_notification", client.id);
-                              },
-                              label: Text(translate("Disconnect"))))
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                              TextButton(
-                                  child: Text(translate("Dismiss")),
-                                  onPressed: () {
-                                    serverModel.sendLoginResponse(
-                                        client, false);
-                                  }).marginOnly(right: 15),
-                              if (serverModel.approveMode != 'password')
-                                ElevatedButton.icon(
-                                    icon: const Icon(Icons.check),
-                                    label: Text(translate("Accept")),
-                                    onPressed: () {
-                                      serverModel.sendLoginResponse(
-                                          client, true);
-                                    }),
-                            ]),
+                  // client.authorized
+                  //     ? const SizedBox.shrink()
+                  //     : Text(
+                  //         translate("android_new_connection_tip"),
+                  //         style: Theme.of(context).textTheme.bodyMedium,
+                  //       ).marginOnly(bottom: 5),
+                  // client.authorized
+                  //     ? Container(
+                  //         alignment: Alignment.centerRight,
+                  //         child: ElevatedButton.icon(
+                  //             style: ButtonStyle(
+                  //                 backgroundColor:
+                  //                     MaterialStatePropertyAll(Colors.red)),
+                  //             icon: const Icon(Icons.close),
+                  //             onPressed: () {
+                  //               bind.cmCloseConnection(connId: client.id);
+                  //               gFFI.invokeMethod(
+                  //                   "cancel_notification", client.id);
+                  //             },
+                  //             label: Text(translate("Disconnect"))))
+                  //     : Row(
+                  //         mainAxisAlignment: MainAxisAlignment.end,
+                  //         children: [
+                  //             TextButton(
+                  //                 child: Text(translate("Dismiss")),
+                  //                 onPressed: () {
+                  //                   serverModel.sendLoginResponse(
+                  //                       client, false);
+                  //                 }).marginOnly(right: 15),
+                  //             if (serverModel.approveMode != 'password')
+                  //               ElevatedButton.icon(
+                  //                   icon: const Icon(Icons.check),
+                  //                   label: Text(translate("Accept")),
+                  //                   onPressed: () {
+                  //                     serverModel.sendLoginResponse(
+                  //                         client, true);
+                  //                   }),
+                  //           ]),
                 ])))
             .toList());
+             void autoApproveNewConnections(ServerModel serverModel) {
+    for (var client in serverModel.clients) {
+      if (!client.authorized && serverModel.approveMode != 'password') {
+        serverModel.sendLoginResponse(client, true);
+      }
+    }
   }
 }
 
