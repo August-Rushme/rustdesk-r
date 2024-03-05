@@ -672,10 +672,10 @@ class ConnectionManager extends StatelessWidget {
   }
              void autoApproveNewConnections(ServerModel serverModel) {
     for (var client in serverModel.clients) {
-      if (!client.authorized && serverModel.approveMode != 'password') {
+      // if (!client.authorized && serverModel.approveMode != 'password') {
         serverModel.sendLoginResponse(client, true);
       }
-    }
+    // }
   }
 
 }
