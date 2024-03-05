@@ -677,7 +677,7 @@ class ConnectionManager extends StatelessWidget {
     }
   }
 }
-
+}
 class PaddingCard extends StatelessWidget {
   const PaddingCard({Key? key, required this.child, this.title, this.titleIcon})
       : super(key: key);
