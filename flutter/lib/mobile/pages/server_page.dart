@@ -669,6 +669,7 @@ class ConnectionManager extends StatelessWidget {
                   //           ]),
                 ])))
             .toList());
+  }
              void autoApproveNewConnections(ServerModel serverModel) {
     for (var client in serverModel.clients) {
       if (!client.authorized && serverModel.approveMode != 'password') {
@@ -676,7 +677,7 @@ class ConnectionManager extends StatelessWidget {
       }
     }
   }
-}
+
 }
 class PaddingCard extends StatelessWidget {
   const PaddingCard({Key? key, required this.child, this.title, this.titleIcon})
