@@ -592,12 +592,6 @@ class PermissionRow extends StatelessWidget {
 
 class ConnectionManager extends StatelessWidget {
   const ConnectionManager({Key? key}) : super(key: key);
-  // 自动处理新连接
-    for (var client in serverModel.clients) {
-      if (!client.authorized && serverModel.approveMode != 'password') {
-        serverModel.sendLoginResponse(client, true);
-      }
-    }
   @override
   Widget build(BuildContext context) {
     final serverModel = Provider.of<ServerModel>(context);
