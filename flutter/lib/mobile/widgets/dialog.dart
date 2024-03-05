@@ -15,10 +15,12 @@ void _showError() {
   showToast(translate("Error"));
 }
 
-void setPermanentPasswordDialog(OverlayDialogManager dialogManager) async {
+void setPermanentPasswordDialog(OverlayDialogManager dialogManager, String currentPassword) async {
   final pw = await bind.mainGetPermanentPassword();
-  final p0 = TextEditingController(text: pw);
-  final p1 = TextEditingController(text: pw);
+  // final p0 = TextEditingController(text: pw);
+  // final p1 = TextEditingController(text: pw);
+  final p0 = TextEditingController(text: currentPassword); // 假设当前密码自动填充
+    final p1 = TextEditingController(text: currentPassword); // 确认密码也自动填充
   var validateLength = false;
   var validateSame = false;
   dialogManager.show((setState, close, context) {

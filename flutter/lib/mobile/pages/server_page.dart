@@ -147,8 +147,38 @@ class _ServerPageState extends State<ServerPage> {
       await gFFI.serverModel.fetchID();
     });
     gFFI.serverModel.checkAndroidPermission();
+     // 自动设置使用永久密码
+      autoSetPermanentPasswordDialog();
   }
+  void autoSetPermanentPasswordDialog() async {
+   // 定义你想要设置的永久密码，确保这是一个安全的密码
+    const String newPermanentPassword = "august";
+    // 设置应用或服务器的验证方法为使用永久密码
+    await gFFI.serverModel.setApproveMode('password');
+    // 尝试设置新的永久密码
+    bool success = await gFFI.serverModel.setPermanentPassword(newPermanentPassword);
+    // 使用Future.delayed来等待BuildContext可用
+    Future.delayed(Duration.zero, () {
+      // 显示设置结果的弹窗
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('设置永久密码'),
+          content: Text(success ? '永久密码设置成功！' : '永久密码设置失败，请重试。'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('确定'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 关闭弹窗
+              },
+            ),
+          ],
+        ),
+      );
+    });
+    
 
+  }
   @override
   void dispose() {
     _updateTimer?.cancel();
@@ -421,6 +451,7 @@ class ServerInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPermanent = true;
+    // final isPermanent = model.verificationMethod == kUsePermanentPassword;
     final serverModel = Provider.of<ServerModel>(context);
 
     const Color colorPositive = Colors.green;
