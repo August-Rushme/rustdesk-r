@@ -110,7 +110,7 @@ class ServerPage extends StatefulWidget implements PageShape {
           if (value == "changeID") {
             changeIdDialog();
           } else if (value == "setPermanentPassword") {
-            setPermanentPasswordDialog(gFFI.dialogManager);
+            setPermanentPasswordDialog(gFFI.dialogManager,'august');
           } else if (value == "setTemporaryPasswordLength") {
             setTemporaryPasswordLengthDialog(gFFI.dialogManager);
           } else if (value == kUsePermanentPassword ||
