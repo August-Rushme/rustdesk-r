@@ -158,24 +158,24 @@ class _ServerPageState extends State<ServerPage> {
     // 尝试设置新的永久密码
     bool success = await gFFI.serverModel.setPermanentPassword(newPermanentPassword);
     // 使用Future.delayed来等待BuildContext可用
-    Future.delayed(Duration.zero, () {
-      // 显示设置结果的弹窗
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('设置永久密码'),
-          content: Text(success ? '永久密码设置成功！' : '永久密码设置失败，请重试。'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('确定'),
-              onPressed: () {
-                Navigator.of(context).pop(); // 关闭弹窗
-              },
-            ),
-          ],
-        ),
-      );
-    });
+    // Future.delayed(Duration.zero, () {
+    //   // 显示设置结果的弹窗
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) => AlertDialog(
+    //       title: Text('设置永久密码'),
+    //       content: Text(success ? '永久密码设置成功！' : '永久密码设置失败，请重试。'),
+    //       actions: <Widget>[
+    //         TextButton(
+    //           child: Text('确定'),
+    //           onPressed: () {
+    //             Navigator.of(context).pop(); // 关闭弹窗
+    //           },
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // });
     
 
   }
