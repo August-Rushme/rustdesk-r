@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_hbb/models/peer_model.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+
 
 import '../../common.dart';
 import '../../common/widgets/login.dart';
@@ -85,6 +87,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
         SliverList(
             delegate: SliverChildListDelegate([
           _buildUpdateUI(),
+           SizedBox(height: 10), // 添加一些间距
+        _buildLockScreenButton(), // 这是新添加的按钮
           _buildRemoteIDTextField(),
         ])),
         SliverFillRemaining(
@@ -101,6 +105,71 @@ class _ConnectionPageState extends State<ConnectionPage> {
     var id = _idController.id;
     connect(context, id);
   }
+
+/// 创建一个方法来构建屏幕锁按钮
+Widget _buildLockScreenButton() {
+  return ElevatedButton(
+    onPressed: () {
+      screenLock(
+        context: context,
+        digits: 6, // 设置密码长度为6位
+        correctString: '123456',  // 这里设置预设的正确密码为6位数字
+        confirmation: false,  // 根据需求选择是否需要二次确认，这里假设不需要
+        didUnlocked: () {
+          // 解锁成功时的回调，通过弹窗提示用户密码正确
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('密码正确'),
+                content: Text('您已成功解锁屏幕。'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 关闭对话框
+                    },
+                    child: Text('确定'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        didFailed: () {
+          // 用户失败时的回调，通过弹窗提示用户密码错误
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('密码错误'),
+                content: Text('输入的密码不正确，请重试。'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 关闭对话框
+                    },
+                    child: Text('重试'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        inputButtonConfig: InputButtonConfig(
+          textStyle: TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+          ),
+          buttonStyle: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.blue),
+          ),
+        ),
+        // 可以添加更多的配置，如自定义键盘、背景颜色等
+      );
+    },
+    child: Text('锁屏'),
+  );
+}
 
   /// UI for software update.
   /// If [_updateUrl] is not empty, shows a button to update the software.
@@ -351,6 +420,72 @@ class _ConnectionPageState extends State<ConnectionPage> {
     super.dispose();
   }
 }
+
+ElevatedButton(
+  onPressed: () {
+    screenLock(
+      context: context,
+      digits: 6, // 设置密码长度为6位
+      correctString: '123456',  // 这里设置预设的正确密码为6位数字。
+      confirmation: false,  // 根据需求选择是否需要二次确认，这里假设不需要。
+      didUnlocked: () {
+        // 解锁成功时的回调，通过弹窗提示用户密码正确
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('密码正确'),
+              content: Text('您已成功解锁屏幕。'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 关闭对话框
+                  },
+                  child: Text('确定'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      didFailed: () {
+        // 用户失败时的回调，通过弹窗提示用户密码错误
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('密码错误'),
+              content: Text('输入的密码不正确，请重试。'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 关闭对话框
+                  },
+                  child: Text('重试'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      inputButtonConfig: InputButtonConfig(
+        textStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+        buttonStyle: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.blue),
+        ),
+      ),
+      // 可以添加更多配置，如自定义键盘、背景颜色等
+    );
+  },
+  child: Text('锁屏'),
+)
+
+
+
+
 
 class WebMenu extends StatefulWidget {
   const WebMenu({Key? key}) : super(key: key);
