@@ -112,7 +112,6 @@ Widget _buildLockScreenButton() {
     onPressed: () {
       screenLock(
         context: context,
-        digits: 6, // 设置密码长度为6位
         correctString: '123456',  // 这里设置预设的正确密码为6位数字
         confirmation: false,  // 根据需求选择是否需要二次确认，这里假设不需要
         didUnlocked: () {
