@@ -154,16 +154,17 @@ Widget _buildLockScreenButton() {
             },
           );
         },
-        inputButtonConfig: InputButtonConfig(
-          textStyle: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-          ),
+       keyPadConfig: KeyPadConfig(
+          // 在这里自定义键盘样式
+          textStyle: TextStyle(fontSize: 30, color: Colors.black),
           buttonStyle: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue),
-          ),
+            backgroundColor: MaterialStateProperty.all(Colors.grey[300]),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            )),
         ),
-        // 可以添加更多的配置，如自定义键盘、背景颜色等
+        ),
+         // 在这里添加其他配置
       );
     },
     child: Text('锁屏'),
