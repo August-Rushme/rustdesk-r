@@ -118,8 +118,8 @@ Widget _buildLockScreenButton() {
       // 在这里实现您的验证逻辑
       // 返回 true 表示验证通过，返回 false 表示验证失败
       // 例如，您可以在这里检查用户输入是否符合您的验证标准，而不是依赖于一个固定的“correctString”
- return true
-    },
+          return true;
+        },
         canCancel: false,
         onUnlocked: () {
           // 解锁成功时的回调，通过弹窗提示用户密码正确
