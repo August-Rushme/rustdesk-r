@@ -157,7 +157,12 @@ Widget _buildLockScreenButton() {
       keyPadConfig: KeyPadConfig(
           buttonConfig: KeyPadButtonConfig(
             // 在这里自定义数字按钮样式
-            textStyle: TextStyle(fontSize: 30, color: Colors.black),
+            textStyle: StyledInputConfig.getDefaultTextStyle(context)
+              .copyWith(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 30,
+          ),
             buttonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.grey[300]),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
