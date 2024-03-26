@@ -111,8 +111,9 @@ Widget _buildLockScreenButton() {
   return ElevatedButton(
     onPressed: () {
       screenLock(
-        context: context,
-        correctString: 'dskfjdsj',  // 这里设置预设的正确密码为6位数字
+          context: context,
+          correctString: '1234',
+          canCancel: false,
         // 根据需求选择是否需要二次确认，这里假设不需要
           onValidate: (String input) async {
       // 在这里实现您的验证逻辑
@@ -120,7 +121,7 @@ Widget _buildLockScreenButton() {
       // 例如，您可以在这里检查用户输入是否符合您的验证标准，而不是依赖于一个固定的“correctString”
           return true;
         },
-        canCancel: false,
+     
         onUnlocked: () {
           // 解锁成功时的回调，通过弹窗提示用户密码正确
           showDialog(
@@ -132,7 +133,7 @@ Widget _buildLockScreenButton() {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // 关闭对话框
+                     Navigator.pop(context); // 关闭锁屏// 关闭对话框
                     },
                     child: Text('确定'),
                   ),
