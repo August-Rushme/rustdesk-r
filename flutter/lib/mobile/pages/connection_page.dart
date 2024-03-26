@@ -168,7 +168,7 @@ Widget _buildLockScreenButton() {
           ),
           actionButtonConfig: KeyPadButtonConfig(
             // 在这里自定义动作按钮样式，比如删除按钮
-            textStyle: TextStyle(fontSize: 25, color: Colors.redAccent),
+         
             buttonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.white),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
