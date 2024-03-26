@@ -155,7 +155,7 @@ Widget _buildLockScreenButton() {
           );
         },
       keyPadConfig: KeyPadConfig(
-          buttonConfig: KeyPadButtonConfig(
+          buttonConfig: StyledInputConfig(
             // 在这里自定义数字按钮样式
             textStyle: StyledInputConfig.getDefaultTextStyle(context)
               .copyWith(
