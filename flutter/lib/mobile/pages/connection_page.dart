@@ -112,7 +112,7 @@ Widget _buildLockScreenButton() {
     onPressed: () {
       screenLock(
         context: context,
-        correctString: '123456',  // 这里设置预设的正确密码为6位数字
+        correctString: '1234',  // 这里设置预设的正确密码为6位数字
         // 根据需求选择是否需要二次确认，这里假设不需要
         onUnlocked: () {
           // 解锁成功时的回调，通过弹窗提示用户密码正确
@@ -154,31 +154,6 @@ Widget _buildLockScreenButton() {
             },
           );
         },
-      keyPadConfig: KeyPadConfig(
-          buttonConfig: KeyPadButtonConfig(
-            // 在这里自定义数字按钮样式
-   
-          fontSize: 30,
-            buttonStyle: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.grey[300]),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              )),
-            ),
-          ),
-          actionButtonConfig: KeyPadButtonConfig(
-            // 在这里自定义动作按钮样式，比如删除按钮
-         
-            buttonStyle: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.white),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              )),
-            ),
-          ),
-          clearOnLongPressed: true,  // 长按删除键时清除输入
-        ),
-        // 可以添加更多的配置，如自定义键盘、背景颜色等
       );
     },
     child: Text('锁屏'),
