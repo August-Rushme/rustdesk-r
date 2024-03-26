@@ -157,7 +157,7 @@ Widget _buildLockScreenButton() {
       keyPadConfig: KeyPadConfig(
           buttonConfig: KeyPadButtonConfig(
             // 在这里自定义数字按钮样式
-          color: Colors.black,
+   
           fontSize: 30,
             buttonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.grey[300]),
