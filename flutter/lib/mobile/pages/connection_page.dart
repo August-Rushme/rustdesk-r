@@ -114,7 +114,7 @@ Widget _buildLockScreenButton() {
         context: context,
         correctString: '1234',  // 这里设置预设的正确密码为6位数字
         // 根据需求选择是否需要二次确认，这里假设不需要
-        canCancel: true,
+        canCancel: false,
         onUnlocked: () {
           // 解锁成功时的回调，通过弹窗提示用户密码正确
           showDialog(
