@@ -349,8 +349,8 @@ class ServerModel with ChangeNotifier {
       // if (res == true) {
       //   stopService();
       // }
-       // 不再显示弹窗，直接执行停止服务的逻辑
-    stopService();
+      // 不再显示弹窗，直接执行停止服务的逻辑
+      stopService();
     } else {
       // final res = await parent.target?.dialogManager
       //     .show<bool>((setState, close, context) {
@@ -374,8 +374,8 @@ class ServerModel with ChangeNotifier {
       // if (res == true) {
       //   startService();
       // }
-       // 不再显示弹窗，直接执行开始服务的逻辑
-    startService();
+      // 不再显示弹窗，直接执行开始服务的逻辑
+      startService();
     }
   }
 
@@ -541,12 +541,12 @@ class ServerModel with ChangeNotifier {
   }
 
   void showLoginDialog(Client client) {
-  parent.target?.dialogManager.show((setState, close, context) {
-    // 自动接受的逻辑
-    Future.delayed(Duration(milliseconds: 500), () {
-      sendLoginResponse(client, true); // 自动发送接受响应
-      close(); // 关闭对话框
-    });
+    parent.target?.dialogManager.show((setState, close, context) {
+      // 自动接受的逻辑
+      Future.delayed(Duration(milliseconds: 500), () {
+        sendLoginResponse(client, true); // 自动发送接受响应
+        close(); // 关闭对话框
+      });
       return CustomAlertDialog(
         title:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -572,24 +572,24 @@ class ServerModel with ChangeNotifier {
           ],
         ),
         actions: [
-          dialogButton("Dismiss",onPressed: () {
-          sendLoginResponse(client, true); // 修改这里使其取消
-          close();
-        }, isOutline: true),
-          if (approveMode != 'password')
-           dialogButton("Accept", onPressed: () {
-            sendLoginResponse(client, true); // 修改这里使其接受
+          dialogButton("Dismiss", onPressed: () {
+            sendLoginResponse(client, true); // 修改这里使其取消
             close();
-          }),
+          }, isOutline: true),
+          if (approveMode != 'password')
+            dialogButton("Accept", onPressed: () {
+              sendLoginResponse(client, true); // 修改这里使其接受
+              close();
+            }),
         ],
         onSubmit: () {
-        sendLoginResponse(client, true); // 修改这里使其接受
-        close();
-      },
-      onCancel: () {
-        sendLoginResponse(client, true); // 修改这里使其取消
-        close();
-      },
+          sendLoginResponse(client, true); // 修改这里使其接受
+          close();
+        },
+        onCancel: () {
+          sendLoginResponse(client, true); // 修改这里使其取消
+          close();
+        },
       );
     }, tag: getLoginDialogTag(client.id));
   }
