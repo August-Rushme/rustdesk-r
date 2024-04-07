@@ -8,6 +8,8 @@ import 'package:flutter_hbb/models/chat_model.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // 用于处理JSON数据
 
 import '../../common.dart';
 import '../../common/widgets/dialog.dart';
@@ -510,24 +512,60 @@ class ServerInfo extends StatelessWidget {
     saveDeviceId(deviceId).then((_) async {
       // 可以在这里执行保存后的操作，比如显示一个提示
       final String? password = await getPassword();
+      // 准备请求头
+      var headers = {'Content-Type': 'application/json'};
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('密码$password,deviceId$deviceId'),
-            content: Text('密码$password,deviceId$deviceId'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // 关闭对话框
-                },
-                child: Text('确认'),
-              ),
-            ],
-          );
-        },
+      // 发送网络请求
+      var response = await http.post(
+        Uri.parse('https://example.com/api'),
+        headers: headers,
+        body: jsonEncode({'device_id': deviceId, 'password': password}),
       );
+
+      if (response.statusCode == 200) {
+        // 请求成功，处理服务器返回的数据
+        var data = jsonDecode(response.body);
+        //以弹窗的形式显示服务器返回的数据
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('服务器返回的数据'),
+              content: Text(data['message']),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('确定'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 关闭弹窗
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // 请求失败，处理错误
+        print('Request failed with status: ${response.statusCode}.');
+        // 以弹窗的形式显示错误消息
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('错误'),
+              content: Text('请求失败，请重试。$response'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('确定'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 关闭弹窗
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+
       // 发送网络请求
     }).catchError((error) {
       // 处理可能发生的错误，比如显示错误消息

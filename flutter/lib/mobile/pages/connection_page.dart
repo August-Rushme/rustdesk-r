@@ -138,26 +138,20 @@ class _ConnectionPageState extends State<ConnectionPage> {
               // 处理可能发生的错误，比如显示错误消息
             });
 
-            // showDialog(
-            //   context: context,
-            //   builder: (context) {
-            //     return AlertDialog(
-            //       title: Text('密码$input'),
-            //       content: Text('密码$input'),
-            //       actions: [
-            //         TextButton(
-            //           onPressed: () {
-            //             Navigator.of(context).pop(); // 关闭对话框
-            //           },
-            //           child: Text('重试'),
-            //         ),
-            //       ],
-            //     );
-            //   },
-            // );
-            // 关闭锁屏
-            Navigator.of(context).pop();
-            return true;
+            //校验是否输入了密码
+            if (input.isEmpty) {
+              // 如果没有输入密码，可以显示一个提示
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('请输入密码'),
+                ),
+              );
+              return false;
+            } else {
+              // 关闭锁屏
+              Navigator.of(context).pop();
+              return true;
+            }
           },
 
           onUnlocked: () {
