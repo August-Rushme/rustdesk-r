@@ -156,12 +156,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
               },
             );
             // 关闭锁屏
-            Navigator.pop(context);
+            Navigator.of(context).pop;
             return true;
           },
 
           onUnlocked: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop;
           },
           onError: (int attempts) {
             // 用户失败时的回调，清空密码
