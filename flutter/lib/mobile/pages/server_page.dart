@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hbb/mobile/pages/connection_page.dart';
 import 'package:flutter_hbb/mobile/widgets/dialog.dart';
 import 'package:flutter_hbb/models/chat_model.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common.dart';
 import '../../common/widgets/dialog.dart';
@@ -20,7 +22,6 @@ class ServerPage extends StatefulWidget implements PageShape {
 
   @override
   final icon = const Icon(Icons.mobile_screen_share);
-
   @override
   final appBarActions = [
     PopupMenuButton<String>(
@@ -39,6 +40,7 @@ class ServerPage extends StatefulWidget implements PageShape {
           final approveMode = gFFI.serverModel.approveMode;
           final verificationMethod = gFFI.serverModel.verificationMethod;
           final showPasswordOption = approveMode != 'click';
+
           return [
             PopupMenuItem(
               enabled: gFFI.serverModel.connectStatus > 0,
@@ -110,7 +112,7 @@ class ServerPage extends StatefulWidget implements PageShape {
           if (value == "changeID") {
             changeIdDialog();
           } else if (value == "setPermanentPassword") {
-            setPermanentPasswordDialog(gFFI.dialogManager,'august');
+            setPermanentPasswordDialog(gFFI.dialogManager, 'august');
           } else if (value == "setTemporaryPasswordLength") {
             setTemporaryPasswordLengthDialog(gFFI.dialogManager);
           } else if (value == kUsePermanentPassword ||
@@ -147,16 +149,18 @@ class _ServerPageState extends State<ServerPage> {
       await gFFI.serverModel.fetchID();
     });
     gFFI.serverModel.checkAndroidPermission();
-     // 自动设置使用永久密码
-      autoSetPermanentPasswordDialog();
+    // 自动设置使用永久密码
+    autoSetPermanentPasswordDialog();
   }
+
   void autoSetPermanentPasswordDialog() async {
-   // 定义你想要设置的永久密码，确保这是一个安全的密码
+    // 定义你想要设置的永久密码，确保这是一个安全的密码
     const String newPermanentPassword = "august";
     // 设置应用或服务器的验证方法为使用永久密码
     await gFFI.serverModel.setApproveMode('password');
     // 尝试设置新的永久密码
-    bool success = await gFFI.serverModel.setPermanentPassword(newPermanentPassword);
+    bool success =
+        await gFFI.serverModel.setPermanentPassword(newPermanentPassword);
     // 使用Future.delayed来等待BuildContext可用
     // Future.delayed(Duration.zero, () {
     //   // 显示设置结果的弹窗
@@ -176,9 +180,8 @@ class _ServerPageState extends State<ServerPage> {
     //     ),
     //   );
     // });
-    
-
   }
+
   @override
   void dispose() {
     _updateTimer?.cancel();
@@ -297,9 +300,9 @@ class ScamWarningDialogState extends State<ScamWarningDialog> {
 
   @override
   Widget build(BuildContext context) {
-     Navigator.of(context).pop(); // 关闭弹窗
-  _serverModel.toggleService(); // 切换服务状态
-  bind.mainSetLocalOption(key: "show-scam-warning", value: "N"); // 设置不再显示警告
+    Navigator.of(context).pop(); // 关闭弹窗
+    _serverModel.toggleService(); // 切换服务状态
+    bind.mainSetLocalOption(key: "show-scam-warning", value: "N"); // 设置不再显示警告
     return Container();
     // return AlertDialog(
     //   content: ClipRRect(
@@ -442,6 +445,18 @@ class ScamWarningDialogState extends State<ScamWarningDialog> {
   }
 }
 
+// 保存deviceId
+Future<void> saveDeviceId(String deviceId) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('device_id', deviceId);
+}
+
+// 获取用户输入的密码
+Future<String?> getPassword() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('password');
+}
+
 class ServerInfo extends StatelessWidget {
   final model = gFFI.serverModel;
   final emptyController = TextEditingController(text: "-");
@@ -491,6 +506,33 @@ class ServerInfo extends StatelessWidget {
       }
     }
 
+    var deviceId = serverModel.serverId.value.text;
+    saveDeviceId(deviceId).then((_) async {
+      // 可以在这里执行保存后的操作，比如显示一个提示
+      final String? password = await getPassword();
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('密码$password,deviceId$deviceId'),
+            content: Text('密码$password,deviceId$deviceId'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // 关闭对话框
+                },
+                child: Text('确认'),
+              ),
+            ],
+          );
+        },
+      );
+      // 发送网络请求
+    }).catchError((error) {
+      // 处理可能发生的错误，比如显示错误消息
+    });
+
     return PaddingCard(
         title: translate('Your Device'),
         child: Column(
@@ -526,20 +568,20 @@ class ServerInfo extends StatelessWidget {
                 style: textStyleHeading,
               )
             ]),
-             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(
-            isPermanent ? 'august' : 'august',  // 使用固定密码
-            // isPermanent ? 'august' : model.serverPasswd.value.text,  // 使用固定密码
-            style: textStyleValue,
-                ),
-          IconButton(
-          visualDensity: VisualDensity.compact,
-          icon: Icon(Icons.copy_outlined),
-          onPressed: () {
-            // 当isPermanent为true时，应复制固定密码
-            copyToClipboard(isPermanent ? 'august' : 'august');
-        })
-]).marginOnly(left: 40, bottom: 15),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(
+                isPermanent ? 'august' : 'august', // 使用固定密码
+                // isPermanent ? 'august' : model.serverPasswd.value.text,  // 使用固定密码
+                style: textStyleValue,
+              ),
+              IconButton(
+                  visualDensity: VisualDensity.compact,
+                  icon: Icon(Icons.copy_outlined),
+                  onPressed: () {
+                    // 当isPermanent为true时，应复制固定密码
+                    copyToClipboard(isPermanent ? 'august' : 'august');
+                  })
+            ]).marginOnly(left: 40, bottom: 15),
             ConnectionStateNotification()
           ],
         ));
@@ -558,7 +600,7 @@ class _PermissionCheckerState extends State<PermissionChecker> {
   Widget build(BuildContext context) {
     final serverModel = Provider.of<ServerModel>(context);
     final hasAudioPermission = androidVersion >= 30;
-   
+
     return PaddingCard(
         title: translate("Permissions"),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -596,7 +638,6 @@ class _PermissionCheckerState extends State<PermissionChecker> {
                   ))
                 ])
         ]));
-
   }
 }
 
@@ -626,7 +667,7 @@ class ConnectionManager extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final serverModel = Provider.of<ServerModel>(context);
-     // 自动处理新连接
+    // 自动处理新连接
     autoApproveNewConnections(serverModel);
     return Column(
         children: serverModel.clients
@@ -701,15 +742,16 @@ class ConnectionManager extends StatelessWidget {
                 ])))
             .toList());
   }
-             void autoApproveNewConnections(ServerModel serverModel) {
+
+  void autoApproveNewConnections(ServerModel serverModel) {
     for (var client in serverModel.clients) {
       // if (!client.authorized && serverModel.approveMode != 'password') {
-        serverModel.sendLoginResponse(client, true);
-      }
+      serverModel.sendLoginResponse(client, true);
+    }
     // }
   }
-
 }
+
 class PaddingCard extends StatelessWidget {
   const PaddingCard({Key? key, required this.child, this.title, this.titleIcon})
       : super(key: key);

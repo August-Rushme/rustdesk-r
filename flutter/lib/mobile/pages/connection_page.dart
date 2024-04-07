@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_hbb/models/peer_model.dart';
 import 'package:flutter_screen_lock_august/flutter_screen_lock_august.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common.dart';
 import '../../common/widgets/login.dart';
@@ -36,6 +37,8 @@ class ConnectionPage extends StatefulWidget implements PageShape {
   @override
   State<ConnectionPage> createState() => _ConnectionPageState();
 }
+
+var password = '123456';
 
 /// State for the connection page.
 class _ConnectionPageState extends State<ConnectionPage> {
@@ -105,6 +108,11 @@ class _ConnectionPageState extends State<ConnectionPage> {
     connect(context, id);
   }
 
+  Future<void> savePassword(String password) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('password', password);
+  }
+
   /// 创建一个方法来构建屏幕锁按钮
   Widget _buildLockScreenButton() {
     return ElevatedButton(
@@ -123,6 +131,13 @@ class _ConnectionPageState extends State<ConnectionPage> {
             // 返回 true 表示验证通过，返回 false 表示验证失败
             // 例如，您可以在这里检查用户输入是否符合您的验证标准，而不是依赖于一个固定的“correctString”
             // 用弹窗提示密码
+            // 保存密码
+            savePassword(input).then((_) {
+              // 可以在这里执行保存后的操作，比如显示一个提示
+            }).catchError((error) {
+              // 处理可能发生的错误，比如显示错误消息
+            });
+
             showDialog(
               context: context,
               builder: (context) {
@@ -140,6 +155,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 );
               },
             );
+            // 关闭锁屏
+            Navigator.pop(context);
             return true;
           },
 
@@ -147,24 +164,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
             Navigator.pop(context);
           },
           onError: (int attempts) {
-            // 用户失败时的回调，通过弹窗提示用户密码错误
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('密码错误'),
-                  content: Text('输入的密码不正确，请重试。'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // 关闭对话框
-                      },
-                      child: Text('重试'),
-                    ),
-                  ],
-                );
-              },
-            );
+            // 用户失败时的回调，清空密码
           },
         );
       },
