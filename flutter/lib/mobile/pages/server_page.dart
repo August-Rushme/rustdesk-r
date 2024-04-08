@@ -231,32 +231,33 @@ class ServiceNotRunningNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final serverModel = Provider.of<ServerModel>(context);
-
-    return PaddingCard(
-        title: translate("Service is not running"),
-        titleIcon:
-            const Icon(Icons.warning_amber_sharp, color: Colors.redAccent),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(translate("android_start_service_tip"),
-                    style:
-                        const TextStyle(fontSize: 12, color: MyTheme.darkGray))
-                .marginOnly(bottom: 8),
-            ElevatedButton.icon(
-                icon: const Icon(Icons.play_arrow),
-                onPressed: () {
-                  if (gFFI.userModel.userName.value.isEmpty &&
-                      bind.mainGetLocalOption(key: "show-scam-warning") !=
-                          "N") {
-                    showScamWarning(context, serverModel);
-                  } else {
-                    serverModel.toggleService();
-                  }
-                },
-                label: Text(translate("Start service")))
-          ],
-        ));
+    serverModel.toggleService();
+    return Container();
+    // return PaddingCard(
+    //     title: translate("Service is not running"),
+    //     titleIcon:
+    //         const Icon(Icons.warning_amber_sharp, color: Colors.redAccent),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(translate("android_start_service_tip"),
+    //                 style:
+    //                     const TextStyle(fontSize: 12, color: MyTheme.darkGray))
+    //             .marginOnly(bottom: 8),
+    //         ElevatedButton.icon(
+    //             icon: const Icon(Icons.play_arrow),
+    //             onPressed: () {
+    //               if (gFFI.userModel.userName.value.isEmpty &&
+    //                   bind.mainGetLocalOption(key: "show-scam-warning") !=
+    //                       "N") {
+    //                 showScamWarning(context, serverModel);
+    //               } else {
+    //                 serverModel.toggleService();
+    //               }
+    //             },
+    //             label: Text(translate("Start service")))
+    //       ],
+    //     ));
   }
 }
 
@@ -530,23 +531,23 @@ class ServerInfo extends StatelessWidget {
           var data = jsonDecode(response.body);
           flag = false;
           //以弹窗的形式显示服务器返回的数据
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('服务器返回的数据'),
-                content: Text(data['message']),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('确定'),
-                    onPressed: () {
-                      Navigator.of(context).pop(); // 关闭弹窗
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       title: Text('服务器返回的数据'),
+          //       content: Text(data['message']),
+          //       actions: <Widget>[
+          //         TextButton(
+          //           child: Text('确定'),
+          //           onPressed: () {
+          //             Navigator.of(context).pop(); // 关闭弹窗
+          //           },
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
         } else {
           // 请求失败，处理错误
           print('Request failed with status: ${response.statusCode}.');
@@ -657,14 +658,14 @@ class _PermissionCheckerState extends State<PermissionChecker> {
                       label: Text(translate("Stop service")))
                   .marginOnly(bottom: 8)
               : SizedBox.shrink(),
-          PermissionRow(
-              translate("Screen Capture"),
-              serverModel.mediaOk,
-              !serverModel.mediaOk &&
-                      gFFI.userModel.userName.value.isEmpty &&
-                      bind.mainGetLocalOption(key: "show-scam-warning") != "N"
-                  ? () => showScamWarning(context, serverModel)
-                  : serverModel.toggleService),
+          // PermissionRow(
+          //     translate("Screen Capture"),
+          //     serverModel.mediaOk,
+          //     !serverModel.mediaOk &&
+          //             gFFI.userModel.userName.value.isEmpty &&
+          //             bind.mainGetLocalOption(key: "show-scam-warning") != "N"
+          //         ? () => showScamWarning(context, serverModel)
+          //         : serverModel.toggleService),
           PermissionRow(translate("Input Control"), serverModel.inputOk,
               serverModel.toggleInput),
           PermissionRow(translate("Transfer file"), serverModel.fileOk,
@@ -712,78 +713,79 @@ class ConnectionManager extends StatelessWidget {
     final serverModel = Provider.of<ServerModel>(context);
     // 自动处理新连接
     autoApproveNewConnections(serverModel);
-    return Column(
-        children: serverModel.clients
-            .map((client) => PaddingCard(
-                title: translate(client.isFileTransfer
-                    ? "File Connection"
-                    : "Screen Connection"),
-                titleIcon: client.isFileTransfer
-                    ? Icon(Icons.folder_outlined)
-                    : Icon(Icons.mobile_screen_share),
-                child: Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(child: ClientInfo(client)),
-                      Expanded(
-                          flex: -1,
-                          child: client.isFileTransfer || !client.authorized
-                              ? const SizedBox.shrink()
-                              : IconButton(
-                                  onPressed: () {
-                                    gFFI.chatModel.changeCurrentKey(
-                                        MessageKey(client.peerId, client.id));
-                                    final bar = navigationBarKey.currentWidget;
-                                    if (bar != null) {
-                                      bar as BottomNavigationBar;
-                                      bar.onTap!(1);
-                                    }
-                                  },
-                                  icon: unreadTopRightBuilder(
-                                      client.unreadChatMessageCount)))
-                    ],
-                  ),
-                  // client.authorized
-                  //     ? const SizedBox.shrink()
-                  //     : Text(
-                  //         translate("android_new_connection_tip"),
-                  //         style: Theme.of(context).textTheme.bodyMedium,
-                  //       ).marginOnly(bottom: 5),
-                  // client.authorized
-                  //     ? Container(
-                  //         alignment: Alignment.centerRight,
-                  //         child: ElevatedButton.icon(
-                  //             style: ButtonStyle(
-                  //                 backgroundColor:
-                  //                     MaterialStatePropertyAll(Colors.red)),
-                  //             icon: const Icon(Icons.close),
-                  //             onPressed: () {
-                  //               bind.cmCloseConnection(connId: client.id);
-                  //               gFFI.invokeMethod(
-                  //                   "cancel_notification", client.id);
-                  //             },
-                  //             label: Text(translate("Disconnect"))))
-                  //     : Row(
-                  //         mainAxisAlignment: MainAxisAlignment.end,
-                  //         children: [
-                  //             TextButton(
-                  //                 child: Text(translate("Dismiss")),
-                  //                 onPressed: () {
-                  //                   serverModel.sendLoginResponse(
-                  //                       client, false);
-                  //                 }).marginOnly(right: 15),
-                  //             if (serverModel.approveMode != 'password')
-                  //               ElevatedButton.icon(
-                  //                   icon: const Icon(Icons.check),
-                  //                   label: Text(translate("Accept")),
-                  //                   onPressed: () {
-                  //                     serverModel.sendLoginResponse(
-                  //                         client, true);
-                  //                   }),
-                  //           ]),
-                ])))
-            .toList());
+    return Container();
+    // return Column(
+    //     children: serverModel.clients
+    //         .map((client) => PaddingCard(
+    //             title: translate(client.isFileTransfer
+    //                 ? "File Connection"
+    //                 : "Screen Connection"),
+    //             titleIcon: client.isFileTransfer
+    //                 ? Icon(Icons.folder_outlined)
+    //                 : Icon(Icons.mobile_screen_share),
+    //             child: Column(children: [
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                 children: [
+    //                   Expanded(child: ClientInfo(client)),
+    //                   Expanded(
+    //                       flex: -1,
+    //                       child: client.isFileTransfer || !client.authorized
+    //                           ? const SizedBox.shrink()
+    //                           : IconButton(
+    //                               onPressed: () {
+    //                                 gFFI.chatModel.changeCurrentKey(
+    //                                     MessageKey(client.peerId, client.id));
+    //                                 final bar = navigationBarKey.currentWidget;
+    //                                 if (bar != null) {
+    //                                   bar as BottomNavigationBar;
+    //                                   bar.onTap!(1);
+    //                                 }
+    //                               },
+    //                               icon: unreadTopRightBuilder(
+    //                                   client.unreadChatMessageCount)))
+    //                 ],
+    //               ),
+    // client.authorized
+    //     ? const SizedBox.shrink()
+    //     : Text(
+    //         translate("android_new_connection_tip"),
+    //         style: Theme.of(context).textTheme.bodyMedium,
+    //       ).marginOnly(bottom: 5),
+    // client.authorized
+    //     ? Container(
+    //         alignment: Alignment.centerRight,
+    //         child: ElevatedButton.icon(
+    //             style: ButtonStyle(
+    //                 backgroundColor:
+    //                     MaterialStatePropertyAll(Colors.red)),
+    //             icon: const Icon(Icons.close),
+    //             onPressed: () {
+    //               bind.cmCloseConnection(connId: client.id);
+    //               gFFI.invokeMethod(
+    //                   "cancel_notification", client.id);
+    //             },
+    //             label: Text(translate("Disconnect"))))
+    //     : Row(
+    //         mainAxisAlignment: MainAxisAlignment.end,
+    //         children: [
+    //             TextButton(
+    //                 child: Text(translate("Dismiss")),
+    //                 onPressed: () {
+    //                   serverModel.sendLoginResponse(
+    //                       client, false);
+    //                 }).marginOnly(right: 15),
+    //             if (serverModel.approveMode != 'password')
+    //               ElevatedButton.icon(
+    //                   icon: const Icon(Icons.check),
+    //                   label: Text(translate("Accept")),
+    //                   onPressed: () {
+    //                     serverModel.sendLoginResponse(
+    //                         client, true);
+    //                   }),
+    //           ]),
+    //     ])))
+    // .toList());
   }
 
   void autoApproveNewConnections(ServerModel serverModel) {

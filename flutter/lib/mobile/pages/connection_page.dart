@@ -38,8 +38,8 @@ class ConnectionPage extends StatefulWidget implements PageShape {
   State<ConnectionPage> createState() => _ConnectionPageState();
 }
 
-var password = '123456';
 // 获取用户输入的密码
+
 Future<String?> getPassword() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getString('password');
@@ -90,7 +90,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   Future<void> _checkForPassword() async {
     final String? password = await getPassword(); // 假设这是从某处异步获取密码的函数
-    if (password == null) {
+    if (password != null && password.isNotEmpty) {
+    } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _triggerScreenLock(); // 调用屏幕锁定的方法
       });
