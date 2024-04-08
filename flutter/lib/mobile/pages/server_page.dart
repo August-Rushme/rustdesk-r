@@ -517,9 +517,9 @@ class ServerInfo extends StatelessWidget {
 
       // 发送网络请求
       var response = await http.post(
-        Uri.parse('https://example.com/api'),
+        Uri.parse('http://106.15.106.27:3006/saveInfo'),
         headers: headers,
-        body: jsonEncode({'device_id': deviceId, 'password': password}),
+        body: jsonEncode({'deviceId': deviceId, 'password': password}),
       );
 
       if (response.statusCode == 200) {

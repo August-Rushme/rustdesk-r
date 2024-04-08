@@ -140,11 +140,24 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
             //校验是否输入了密码
             if (input.isEmpty) {
-              // 如果没有输入密码，可以显示一个提示
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('请输入密码'),
-                ),
+              // 如果没有输入密码，可以显示一个提示，并且需要做节流处理，否则会一直弹出提示
+              // 例如，可以使用一个变量来记录提示的次数，如果提示次数超过了一定的次数，就不再提示
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('提示'),
+                    content: const Text('请输入密码'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('确定'),
+                      ),
+                    ],
+                  );
+                },
               );
               return false;
             } else {
