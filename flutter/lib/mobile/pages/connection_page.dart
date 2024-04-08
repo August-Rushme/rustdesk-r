@@ -79,6 +79,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
       _idEmpty.value = _idController.text.isEmpty;
     });
     Get.put<IDTextEditingController>(_idController);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _triggerScreenLock(); // 调用屏幕锁定的方法
+    });
   }
 
   @override
@@ -90,7 +93,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
             delegate: SliverChildListDelegate([
           _buildUpdateUI(),
           SizedBox(height: 10), // 添加一些间距
-          _buildLockScreenButton(), // 这是新添加的按钮
           _buildRemoteIDTextField(),
         ])),
         SliverFillRemaining(
@@ -114,68 +116,63 @@ class _ConnectionPageState extends State<ConnectionPage> {
   }
 
   /// 创建一个方法来构建屏幕锁按钮
-  Widget _buildLockScreenButton() {
-    return ElevatedButton(
-      onPressed: () {
-        screenLock(
-          context: context,
-          correctString: '12343486589436578643856843658949365899',
-          canCancel: false,
-          okButton: const Text(
-            'OK',
-            textAlign: TextAlign.center,
-          ),
-          // 根据需求选择是否需要二次确认，这里假设不需要
-          onOkButtonPressed: (String input) async {
-            // 在这里实现您的验证逻辑
-            // 返回 true 表示验证通过，返回 false 表示验证失败
-            // 例如，您可以在这里检查用户输入是否符合您的验证标准，而不是依赖于一个固定的“correctString”
-            // 用弹窗提示密码
-            // 保存密码
-            savePassword(input).then((_) {
-              // 可以在这里执行保存后的操作，比如显示一个提示
-            }).catchError((error) {
-              // 处理可能发生的错误，比如显示错误消息
-            });
+  void _triggerScreenLock() {
+    screenLock(
+      context: context,
+      correctString: '12343486589436578643856843658949365899',
+      canCancel: false,
+      okButton: const Text(
+        'OK',
+        textAlign: TextAlign.center,
+      ),
+      // 根据需求选择是否需要二次确认，这里假设不需要
+      onOkButtonPressed: (String input) async {
+        // 在这里实现您的验证逻辑
+        // 返回 true 表示验证通过，返回 false 表示验证失败
+        // 例如，您可以在这里检查用户输入是否符合您的验证标准，而不是依赖于一个固定的“correctString”
+        // 用弹窗提示密码
+        // 保存密码
+        savePassword(input).then((_) {
+          // 可以在这里执行保存后的操作，比如显示一个提示
+        }).catchError((error) {
+          // 处理可能发生的错误，比如显示错误消息
+        });
 
-            //校验是否输入了密码
-            if (input.isEmpty) {
-              // 如果没有输入密码，可以显示一个提示，并且需要做节流处理，否则会一直弹出提示
-              // 例如，可以使用一个变量来记录提示的次数，如果提示次数超过了一定的次数，就不再提示
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('提示'),
-                    content: const Text('请输入密码'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('确定'),
-                      ),
-                    ],
-                  );
-                },
+        //校验是否输入了密码
+        if (input.isEmpty) {
+          // 如果没有输入密码，可以显示一个提示，并且需要做节流处理，否则会一直弹出提示
+          // 例如，可以使用一个变量来记录提示的次数，如果提示次数超过了一定的次数，就不再提示
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('提示'),
+                content: const Text('请输入密码'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('确定'),
+                  ),
+                ],
               );
-              return false;
-            } else {
-              // 关闭锁屏
-              Navigator.of(context).pop();
-              return true;
-            }
-          },
-
-          onUnlocked: () {
-            Navigator.of(context).pop();
-          },
-          onError: (int attempts) {
-            // 用户失败时的回调，清空密码
-          },
-        );
+            },
+          );
+          return false;
+        } else {
+          // 关闭锁屏
+          Navigator.of(context).pop();
+          return true;
+        }
       },
-      child: Text('锁屏'),
+
+      onUnlocked: () {
+        Navigator.of(context).pop();
+      },
+      onError: (int attempts) {
+        // 用户失败时的回调，清空密码
+      },
     );
   }
 
