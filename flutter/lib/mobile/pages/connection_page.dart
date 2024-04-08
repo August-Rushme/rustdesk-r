@@ -39,6 +39,11 @@ class ConnectionPage extends StatefulWidget implements PageShape {
 }
 
 var password = '123456';
+// 获取用户输入的密码
+Future<String?> getPassword() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('password');
+}
 
 /// State for the connection page.
 class _ConnectionPageState extends State<ConnectionPage> {
@@ -79,9 +84,17 @@ class _ConnectionPageState extends State<ConnectionPage> {
       _idEmpty.value = _idController.text.isEmpty;
     });
     Get.put<IDTextEditingController>(_idController);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _triggerScreenLock(); // 调用屏幕锁定的方法
-    });
+    // 查看本地是否有保存的密码
+    _checkForPassword();
+  }
+
+  Future<void> _checkForPassword() async {
+    final String? password = await getPassword(); // 假设这是从某处异步获取密码的函数
+    if (password == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _triggerScreenLock(); // 调用屏幕锁定的方法
+      });
+    }
   }
 
   @override
