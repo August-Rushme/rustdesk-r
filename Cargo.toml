@@ -1,11 +1,11 @@
 [package]
-name = "yike"
+name = "rustdesk"
 version = "1.2.4"
 authors = ["rustdesk <info@rustdesk.com>"]
 edition = "2021"
 build= "build.rs"
 description = "A remote control software."
-default-run = "yike"
+default-run = "rustdesk"
 rust-version = "1.75"
 
 [lib]
