@@ -385,7 +385,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
               title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(translate('Keep RustDesk background service')),
+                    Text(translate('Keep YIKE background service')),
                     Text('* ${translate('Ignore Battery Optimizations')}',
                         style: Theme.of(context).textTheme.bodySmall),
                   ]),
@@ -450,24 +450,24 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
 
     return SettingsList(
       sections: [
-        SettingsSection(
-          title: Text(translate('Account')),
-          tiles: [
-            SettingsTile(
-              title: Obx(() => Text(gFFI.userModel.userName.value.isEmpty
-                  ? translate('Login')
-                  : '${translate('Logout')} (${gFFI.userModel.userName.value})')),
-              leading: Icon(Icons.person),
-              onPressed: (context) {
-                if (gFFI.userModel.userName.value.isEmpty) {
-                  loginDialog();
-                } else {
-                  logOutConfirmDialog();
-                }
-              },
-            ),
-          ],
-        ),
+        // SettingsSection(
+        //   title: Text(translate('Account')),
+        //   tiles: [
+        //     SettingsTile(
+        //       title: Obx(() => Text(gFFI.userModel.userName.value.isEmpty
+        //           ? translate('Login')
+        //           : '${translate('Logout')} (${gFFI.userModel.userName.value})')),
+        //       leading: Icon(Icons.person),
+        //       onPressed: (context) {
+        //         if (gFFI.userModel.userName.value.isEmpty) {
+        //           loginDialog();
+        //         } else {
+        //           logOutConfirmDialog();
+        //         }
+        //       },
+        //     ),
+        //   ],
+        // ),
         SettingsSection(title: Text(translate("Settings")), tiles: [
           SettingsTile(
               title: Text(translate('ID/Relay Server')),
@@ -494,88 +494,88 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
             },
           )
         ]),
-        if (isAndroid)
-          SettingsSection(
-            title: Text(translate("Recording")),
-            tiles: [
-              SettingsTile.switchTile(
-                title:
-                    Text(translate('Automatically record incoming sessions')),
-                leading: Icon(Icons.videocam),
-                description: FutureBuilder(
-                    builder: (ctx, data) => Offstage(
-                        offstage: !data.hasData,
-                        child: Text("${translate("Directory")}: ${data.data}")),
-                    future: bind.mainDefaultVideoSaveDirectory()),
-                initialValue: _autoRecordIncomingSession,
-                onToggle: (v) async {
-                  await bind.mainSetOption(
-                      key: "allow-auto-record-incoming",
-                      value: bool2option("allow-auto-record-incoming", v));
-                  final newValue = option2bool(
-                      'allow-auto-record-incoming',
-                      await bind.mainGetOption(
-                          key: 'allow-auto-record-incoming'));
-                  setState(() {
-                    _autoRecordIncomingSession = newValue;
-                  });
-                },
-              ),
-            ],
-          ),
+        // if (isAndroid)
+        //   SettingsSection(
+        //     title: Text(translate("Recording")),
+        //     tiles: [
+        //       SettingsTile.switchTile(
+        //         title:
+        //             Text(translate('Automatically record incoming sessions')),
+        //         leading: Icon(Icons.videocam),
+        //         description: FutureBuilder(
+        //             builder: (ctx, data) => Offstage(
+        //                 offstage: !data.hasData,
+        //                 child: Text("${translate("Directory")}: ${data.data}")),
+        //             future: bind.mainDefaultVideoSaveDirectory()),
+        //         initialValue: _autoRecordIncomingSession,
+        //         onToggle: (v) async {
+        //           await bind.mainSetOption(
+        //               key: "allow-auto-record-incoming",
+        //               value: bool2option("allow-auto-record-incoming", v));
+        //           final newValue = option2bool(
+        //               'allow-auto-record-incoming',
+        //               await bind.mainGetOption(
+        //                   key: 'allow-auto-record-incoming'));
+        //           setState(() {
+        //             _autoRecordIncomingSession = newValue;
+        //           });
+        //         },
+        //       ),
+        //     ],
+        //   ),
         if (isAndroid)
           SettingsSection(
             title: Text(translate("Share Screen")),
             tiles: shareScreenTiles,
           ),
-        defaultDisplaySection(),
+        // defaultDisplaySection(),
         if (isAndroid)
           SettingsSection(
             title: Text(translate("Enhancements")),
             tiles: enhancementsTiles,
           ),
-        SettingsSection(
-          title: Text(translate("About")),
-          tiles: [
-            SettingsTile(
-                onPressed: (context) async {
-                  if (await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url));
-                  }
-                },
-                title: Text(translate("Version: ") + version),
-                value: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text('rustdesk.com',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                      )),
-                ),
-                leading: Icon(Icons.info)),
-            SettingsTile(
-                title: Text(translate("Build Date")),
-                value: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text(_buildDate),
-                ),
-                leading: Icon(Icons.query_builder)),
-            if (isAndroid)
-              SettingsTile(
-                  onPressed: (context) => onCopyFingerprint(_fingerprint),
-                  title: Text(translate("Fingerprint")),
-                  value: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text(_fingerprint),
-                  ),
-                  leading: Icon(Icons.fingerprint)),
-            SettingsTile(
-              title: Text(translate("Privacy Statement")),
-              onPressed: (context) =>
-                  launchUrlString('https://rustdesk.com/privacy.html'),
-              leading: Icon(Icons.privacy_tip),
-            )
-          ],
-        ),
+        // SettingsSection(
+        //   title: Text(translate("About")),
+        //   tiles: [
+        //     SettingsTile(
+        //         onPressed: (context) async {
+        //           if (await canLaunchUrl(Uri.parse(url))) {
+        //             await launchUrl(Uri.parse(url));
+        //           }
+        //         },
+        //         title: Text(translate("Version: ") + version),
+        //         value: Padding(
+        //           padding: EdgeInsets.symmetric(vertical: 8),
+        //           child: Text('rustdesk.com',
+        //               style: TextStyle(
+        //                 decoration: TextDecoration.underline,
+        //               )),
+        //         ),
+        //         leading: Icon(Icons.info)),
+        //     SettingsTile(
+        //         title: Text(translate("Build Date")),
+        //         value: Padding(
+        //           padding: EdgeInsets.symmetric(vertical: 8),
+        //           child: Text(_buildDate),
+        //         ),
+        //         leading: Icon(Icons.query_builder)),
+        //     if (isAndroid)
+        //       SettingsTile(
+        //           onPressed: (context) => onCopyFingerprint(_fingerprint),
+        //           title: Text(translate("Fingerprint")),
+        //           value: Padding(
+        //             padding: EdgeInsets.symmetric(vertical: 8),
+        //             child: Text(_fingerprint),
+        //           ),
+        //           leading: Icon(Icons.fingerprint)),
+        //     SettingsTile(
+        //       title: Text(translate("Privacy Statement")),
+        //       onPressed: (context) =>
+        //           launchUrlString('https://rustdesk.com/privacy.html'),
+        //       leading: Icon(Icons.privacy_tip),
+        //     )
+        //   ],
+        // ),
       ],
     );
   }

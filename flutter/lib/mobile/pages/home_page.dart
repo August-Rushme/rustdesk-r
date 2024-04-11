@@ -141,7 +141,7 @@ class HomePageState extends State<HomePage> {
         ],
       );
     }
-    return Text("RustDesk");
+    return Text("YIKE");
   }
 }
 
@@ -154,7 +154,7 @@ class WebHomePage extends StatelessWidget {
       // backgroundColor: MyTheme.grayBg,
       appBar: AppBar(
         centerTitle: true,
-        title: Text("RustDesk${isWeb ? " (Beta) " : ""}"),
+        title: Text("YIKE${isWeb ? " (Beta) " : ""}"),
         actions: connectionPage.appBarActions,
       ),
       body: connectionPage,
