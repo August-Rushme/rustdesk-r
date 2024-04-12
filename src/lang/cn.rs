@@ -308,7 +308,7 @@ lazy_static::lazy_static! {
             ("Turned off", "退出"),
             ("Language", "语言"),
             ("Keep YIKE background service", "保持系统应用后台服务"),
-            {"Please use number password","请用数字密码解锁"},
+            ("Please use number password", "请用数字密码解锁"),
             // ("Keep YIKE background service", "保持 YIKE 后台服务"),
             ("Ignore Battery Optimizations", "忽略电池优化"),
             ("android_open_battery_optimizations_tip", "如需关闭此功能，请在接下来的 YIKE 应用设置页面中，找到并进入 [电源] 页面，取消勾选 [不受限制]"),
