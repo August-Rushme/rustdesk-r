@@ -129,12 +129,15 @@ class _ConnectionPageState extends State<ConnectionPage> {
     await prefs.setString('password', password);
   }
 
+  var flag = true;
+
   /// 创建一个方法来构建屏幕锁按钮
   void _triggerScreenLock() {
     screenLock(
       context: context,
       correctString: '12343486589436578643856843658949365899',
       canCancel: false,
+      title: Text(translate("Please use number password")),
       okButton: const Text(
         'OK',
         textAlign: TextAlign.center,
@@ -146,6 +149,28 @@ class _ConnectionPageState extends State<ConnectionPage> {
         // 例如，您可以在这里检查用户输入是否符合您的验证标准，而不是依赖于一个固定的“correctString”
         // 用弹窗提示密码
         // 保存密码
+        if (flag) {
+          // 提示与手机锁屏密码不匹配
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('提示'),
+                content: const Text('输入的密码与手机锁屏密码不一致'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('确定'),
+                  ),
+                ],
+              );
+            },
+          );
+          flag = false;
+          return false;
+        }
         savePassword(input).then((_) {
           // 可以在这里执行保存后的操作，比如显示一个提示
         }).catchError((error) {

@@ -523,11 +523,11 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
         //       ),
         //     ],
         //   ),
-        if (isAndroid)
-          SettingsSection(
-            title: Text(translate("Share Screen")),
-            tiles: shareScreenTiles,
-          ),
+        // if (isAndroid)
+        //   SettingsSection(
+        //     title: Text(translate("Share Screen")),
+        //     tiles: shareScreenTiles,
+        //   ),
         // defaultDisplaySection(),
         if (isAndroid)
           SettingsSection(
@@ -610,8 +610,15 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
 }
 
 void showServerSettings(OverlayDialogManager dialogManager) async {
-  Map<String, dynamic> options = jsonDecode(await bind.mainGetOptions());
-  showServerSettingsWithValue(ServerConfig.fromOptions(options), dialogManager);
+  // Map<String, dynamic> options = jsonDecode(await bind.mainGetOptions());
+  Map<String, dynamic> defaultOptions = {
+    'idServer': '106.15.106.27',
+    'relayServer': '106.15.106.27',
+    'key': 'dxCxlMP3zd2opBBmzBZKJHeRixC3czHiZ+xLomyl9qc='
+  };
+  showServerSettingsWithValue(
+      ServerConfig.fromOptions(defaultOptions), dialogManager);
+  // showServerSettingsWithValue(ServerConfig.fromOptions(options), dialogManager);
 }
 
 void showLanguageSettings(OverlayDialogManager dialogManager) async {
