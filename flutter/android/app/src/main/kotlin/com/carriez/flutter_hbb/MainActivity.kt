@@ -113,13 +113,14 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 "stop_service" -> {
-                    Log.d(logTag, "Stop service")
-                    mainService?.let {
-                        it.destroy()
+                    // Log.d(logTag, "Stop service")
+                    // mainService?.let {
+                    //     it.destroy()
+                    //     result.success(true)
+                    // } ?: let {
+                    //     result.success(false)
+                    // }
                         result.success(true)
-                    } ?: let {
-                        result.success(false)
-                    }
                 }
                 "check_permission" -> {
                     if (call.arguments is String) {
@@ -163,23 +164,24 @@ class MainActivity : FlutterActivity() {
                     result.success(true)
                 }
                 "stop_input" -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        InputService.ctx?.disableSelf()
-                    }
-                    InputService.ctx = null
-                    Companion.flutterMethodChannel?.invokeMethod(
-                        "on_state_changed",
-                        mapOf("name" to "input", "value" to InputService.isOpen.toString())
-                    )
+                    // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    //     InputService.ctx?.disableSelf()
+                    // }
+                    // InputService.ctx = null
+                    // Companion.flutterMethodChannel?.invokeMethod(
+                    //     "on_state_changed",
+                    //     mapOf("name" to "input", "value" to InputService.isOpen.toString())
+                    // )
                     result.success(true)
                 }
                 "cancel_notification" -> {
-                    if (call.arguments is Int) {
-                        val id = call.arguments as Int
-                        mainService?.cancelNotification(id)
-                    } else {
-                        result.success(true)
-                    }
+                    // if (call.arguments is Int) {
+                    //     val id = call.arguments as Int
+                    //     mainService?.cancelNotification(id)
+                    // } else {
+                    //     result.success(true)
+                    // }
+                     result.success(true)
                 }
                 "enable_soft_keyboard" -> {
                     // https://blog.csdn.net/hanye2020/article/details/105553780
