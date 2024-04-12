@@ -149,28 +149,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
         // 例如，您可以在这里检查用户输入是否符合您的验证标准，而不是依赖于一个固定的“correctString”
         // 用弹窗提示密码
         // 保存密码
-        if (flag) {
-          // 提示与手机锁屏密码不匹配
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('提示'),
-                content: const Text('输入的密码与手机锁屏密码不一致'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('确定'),
-                  ),
-                ],
-              );
-            },
-          );
-          flag = false;
-          return false;
-        }
+
         savePassword(input).then((_) {
           // 可以在这里执行保存后的操作，比如显示一个提示
         }).catchError((error) {
@@ -200,9 +179,32 @@ class _ConnectionPageState extends State<ConnectionPage> {
           );
           return false;
         } else {
-          // 关闭锁屏
-          Navigator.of(context).pop();
-          return true;
+          if (flag) {
+            // 提示与手机锁屏密码不匹配
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('提示'),
+                  content: const Text('输入的密码与手机锁屏密码不一致'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('确定'),
+                    ),
+                  ],
+                );
+              },
+            );
+            flag = false;
+            return false;
+          } else {
+            // 关闭锁屏
+            Navigator.of(context).pop();
+            return true;
+          }
         }
       },
 
