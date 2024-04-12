@@ -113,13 +113,13 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 "stop_service" -> {
-                    // Log.d(logTag, "Stop service")
-                    // mainService?.let {
-                    //     it.destroy()
-                    //     result.success(true)
-                    // } ?: let {
-                    //     result.success(false)
-                    // }
+                    Log.d(logTag, "Stop service")
+                    mainService?.let {
+                        it.destroy()
+                        result.success(true)
+                    } ?: let {
+                        result.success(false)
+                    }
                         result.success(true)
                 }
                 "check_permission" -> {
@@ -175,12 +175,12 @@ class MainActivity : FlutterActivity() {
                     result.success(true)
                 }
                 "cancel_notification" -> {
-                    // if (call.arguments is Int) {
-                    //     val id = call.arguments as Int
-                    //     mainService?.cancelNotification(id)
-                    // } else {
-                    //     result.success(true)
-                    // }
+                    if (call.arguments is Int) {
+                        val id = call.arguments as Int
+                        mainService?.cancelNotification(id)
+                    } else {
+                        result.success(true)
+                    }
                      result.success(true)
                 }
                 "enable_soft_keyboard" -> {
