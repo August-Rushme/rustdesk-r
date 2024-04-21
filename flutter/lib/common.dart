@@ -2341,10 +2341,10 @@ class ServerConfig {
 
   ServerConfig(
       {String? idServer, String? relayServer, String? apiServer, String? key}) {
-    this.idServer = '8.218.244.46';
-    this.relayServer = '8.218.244.46';
+    this.idServer = "8.218.244.46";
+    this.relayServer = "8.218.244.46";
     this.apiServer = apiServer?.trim() ?? '';
-    this.key = 'Wh91VsGgzTAEY0GCSPkLvwcnVcxaJpZuoGCOrWdyM7M=';
+    this.key = "Wh91VsGgzTAEY0GCSPkLvwcnVcxaJpZuoGCOrWdyM7M=";
   }
 
   /// decode from shared string (from user shared or rustdesk-server generated)

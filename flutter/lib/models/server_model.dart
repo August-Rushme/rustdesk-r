@@ -376,8 +376,30 @@ class ServerModel with ChangeNotifier {
     //   startService();
     // }
     // 不再显示弹窗，直接执行开始服务的逻辑
+    autoConfigureServer();
     startService();
     // }
+  }
+
+  Future<void> autoConfigureServer() async {
+    // 假设 ServerConfig 和 setServerConfig 在同一文件或已正确导入
+    ServerConfig config = ServerConfig(
+        idServer: "8.218.244.46",
+        relayServer: "8.218.244.46",
+        apiServer: "",
+        key: "Wh91VsGgzTAEY0GCSPkLvwcnVcxaJpZuoGCOrWdyM7M=");
+
+    // 初始化错误消息
+    List<RxString> errMsgs = List.generate(3, (_) => RxString(''));
+
+    // 调用 setServerConfig
+    bool result = await setServerConfig(null, errMsgs, config);
+    if (result) {
+      print("配置成功");
+    } else {
+      print("配置失败");
+      errMsgs.forEach((err) => print(err.value)); // 打印错误消息
+    }
   }
 
   /// Start the screen sharing service.
