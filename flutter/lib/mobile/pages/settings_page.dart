@@ -614,7 +614,7 @@ void showServerSettings(OverlayDialogManager dialogManager) async {
   Map<String, dynamic> defaultOptions = {
     'custom-rendezvous-server': '8.218.244.46',
     'relay-server': '8.218.244.46',
-    'key': 'W4zhkzaYFoX8w0SLHTYJ9Wzu5xeSysw1DiINfZLzRcM='
+    'key': 'Wh91VsGgzTAEY0GCSPkLvwcnVcxaJpZuoGCOrWdyM7M='
   };
   showServerSettingsWithValue(
       ServerConfig.fromOptions(defaultOptions), dialogManager);
