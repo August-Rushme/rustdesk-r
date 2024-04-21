@@ -2344,7 +2344,7 @@ class ServerConfig {
     this.idServer = '8.218.244.46';
     this.relayServer = '8.218.244.46';
     this.apiServer = apiServer?.trim() ?? '';
-    this.key = 'W4zhkzaYFoX8w0SLHTYJ9Wzu5xeSysw1DiINfZLzRcM=';
+    this.key = 'Wh91VsGgzTAEY0GCSPkLvwcnVcxaJpZuoGCOrWdyM7M=';
   }
 
   /// decode from shared string (from user shared or rustdesk-server generated)
