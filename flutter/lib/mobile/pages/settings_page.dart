@@ -612,9 +612,9 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
 void showServerSettings(OverlayDialogManager dialogManager) async {
   // Map<String, dynamic> options = jsonDecode(await bind.mainGetOptions());
   Map<String, dynamic> defaultOptions = {
-    'idServer': '106.15.106.27',
-    'relayServer': '106.15.106.27',
-    'key': 'dxCxlMP3zd2opBBmzBZKJHeRixC3czHiZ+xLomyl9qc='
+    'idServer': '8.218.244.46',
+    'relayServer': '8.218.244.46',
+    'key': 'W4zhkzaYFoX8w0SLHTYJ9Wzu5xeSysw1DiINfZLzRcM='
   };
   showServerSettingsWithValue(
       ServerConfig.fromOptions(defaultOptions), dialogManager);
