@@ -609,16 +609,20 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
   }
 }
 
+// void showServerSettings(OverlayDialogManager dialogManager) async {
+//   // Map<String, dynamic> options = jsonDecode(await bind.mainGetOptions());
+//   Map<String, dynamic> defaultOptions = {
+//     'custom-rendezvous-server': '8.218.244.46',
+//     'relay-server': '8.218.244.46',
+//     'key': 'Wh91VsGgzTAEY0GCSPkLvwcnVcxaJpZuoGCOrWdyM7M='
+//   };
+//   showServerSettingsWithValue(
+//       ServerConfig.fromOptions(defaultOptions), dialogManager);
+//   // showServerSettingsWithValue(ServerConfig.fromOptions(options), dialogManager);
+// }
 void showServerSettings(OverlayDialogManager dialogManager) async {
-  // Map<String, dynamic> options = jsonDecode(await bind.mainGetOptions());
-  Map<String, dynamic> defaultOptions = {
-    'custom-rendezvous-server': '8.218.244.46',
-    'relay-server': '8.218.244.46',
-    'key': 'Wh91VsGgzTAEY0GCSPkLvwcnVcxaJpZuoGCOrWdyM7M='
-  };
-  showServerSettingsWithValue(
-      ServerConfig.fromOptions(defaultOptions), dialogManager);
-  // showServerSettingsWithValue(ServerConfig.fromOptions(options), dialogManager);
+  Map<String, dynamic> options = jsonDecode(await bind.mainGetOptions());
+  showServerSettingsWithValue(ServerConfig.fromOptions(options), dialogManager);
 }
 
 void showLanguageSettings(OverlayDialogManager dialogManager) async {
