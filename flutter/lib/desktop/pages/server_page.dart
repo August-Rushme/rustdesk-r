@@ -387,6 +387,10 @@ class _CmHeaderState extends State<_CmHeader>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    // 自动接受连接
+    if (!client.authorized) {
+      client.authorized = true; // 自动授权客户端
+    }
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
@@ -684,11 +688,20 @@ class _CmControlPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 自动接受连接
+    if (!client.authorized) {
+      client.authorized = true; // 自动授权客户端
+    }
+    // return client.authorized
+    //     ? client.disconnected
+    //         ? buildDisconnected(context)
+    //         : buildAuthorized(context)
+    //     : buildUnAuthorized(context);
     return client.authorized
         ? client.disconnected
             ? buildDisconnected(context)
             : buildAuthorized(context)
-        : buildUnAuthorized(context);
+        : Container();
   }
 
   buildAuthorized(BuildContext context) {
